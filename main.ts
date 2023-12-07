@@ -44,16 +44,16 @@ export async function* checkDownTime(url: string, fetchInit: Options) {
       downTimeStart = 0;
       totalDownTimeElapsed += downTimeElapsed;
       yield { status: response.status, statusText: response.statusText, downTimeElapsed, downTimeTimes, totalDownTimeElapsed };
-      if (options.sleep) {
-        await new Promise(resolve => setTimeout(resolve, options.sleep));
-      }
+
     } catch (error) {
       downTimeStart || downTimeTimes++;
       downTimeStart = downTimeStart || Date.now();
       downTimeElapsed = Date.now() - downTimeStart;
       yield { status: 0, statusText: error.message, downTimeTimes, downTimeElapsed, totalDownTimeElapsed };
+
+    } finally {
       if (options.sleep) {
-        await new Promise(resolve => setTimeout(resolve, options.sleep));
+        await new Promise((resolve) => setTimeout(resolve, options.sleep));
       }
     }
   }
