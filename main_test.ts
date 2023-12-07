@@ -29,9 +29,8 @@ Deno.test('checkDownTime', async () => {
 
   for await (const data of generator) {
     console.log(data);
-    const timeElapsedMs = data.totalDownTimeElapsed;
+    const timeElapsedMs = data.downTimeElapsed;
     const timeElapsedSec = timeElapsedMs / 1000;
-    const timeElapsedMin = timeElapsedSec / 60;
 
     console.log(`${timeElapsedSec} sec`);
 

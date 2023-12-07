@@ -25,7 +25,6 @@ export async function* checkDownTime(url: string, fetchInit: Options) {
   }
 
   let downTimeElapsed = 0;
-  let totalDownTimeElapsed = 0;
   let downTimeTimes = 0;
   let downTimeStart = 0;
 
@@ -40,16 +39,17 @@ export async function* checkDownTime(url: string, fetchInit: Options) {
       if (downTimeStart) {
 
         downTimeElapsed = Date.now() - downTimeStart;
+
       }
       downTimeStart = 0;
-      totalDownTimeElapsed += downTimeElapsed;
-      yield { status: response.status, statusText: response.statusText, downTimeElapsed, downTimeTimes, totalDownTimeElapsed };
+
+      yield { status: response.status, statusText: response.statusText, downTimeElapsed, downTimeTimes };
 
     } catch (error) {
       downTimeStart || downTimeTimes++;
       downTimeStart = downTimeStart || Date.now();
       downTimeElapsed = Date.now() - downTimeStart;
-      yield { status: 0, statusText: error.message, downTimeTimes, downTimeElapsed, totalDownTimeElapsed };
+      yield { status: 0, statusText: error.message, downTimeTimes, downTimeElapsed };
 
     } finally {
       if (options.sleep) {
