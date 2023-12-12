@@ -11,8 +11,8 @@ const fetchInitDefault: Options = {
   },
   redirect: 'follow',
   referrerPolicy: 'no-referrer',
-  timeout: 1000,
-  sleep: 0,
+  timeout: 5000,
+  sleep: 1000,
 };
 
 export async function* checkDownTime(url: string, fetchInit: Options) {
