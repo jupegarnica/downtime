@@ -15,47 +15,126 @@ const fetchInitDefault: Options = {
   sleep: 1000,
 };
 
-export async function* checkDownTime(url: string, fetchInit: Options) {
+type YieldedData = {
+  request: Request,
+  requestsCount: number,
+
+  responses: Response[],
+  errors: Error[],
+  responseTimes: number[],
+
+  lastResponseTime: number,
+  lastResponse: Response | null,
+  lastError: Error | null,
+
+  totalUpTimeElapsed: number,
+  totalDownTimeElapsed: number,
+  downTimeTimes: number,
+
+
+};
+
+
+export async function* checkDownTime(url: string, fetchInit: Options): AsyncGenerator<YieldedData, YieldedData, YieldedData> {
   const options = { ...fetchInitDefault, ...fetchInit };
   let aborted = false;
 
-  let controller = new AbortController();
+  const generatorController = new AbortController();
   if (fetchInit.signal) {
-    fetchInit.signal.addEventListener('abort', () => { aborted = true; controller.abort(); });
+    fetchInit.signal.addEventListener('abort', () => { aborted = true; generatorController.abort('generator end'); });
   }
+  let totalUpTimeElapsed = 0;
+  let totalDownTimeElapsed = 0;
 
-  let downTimeElapsed = 0;
+  let lastDownTimeElapsed = 0;
+  let lastDownTimeStart = 0;
+
+  let lastUpTimeElapsedStart = 0;
+  let lastUpTimeElapsed = 0;
+
   let downTimeTimes = 0;
-  let downTimeStart = 0;
+
+  let data: YieldedData = {
+    request: new Request(url),
+    requestsCount: 0,
+    responses: [],
+    errors: [],
+
+    responseTimes: [],
+    lastResponseTime: 0,
+    lastResponse: null,
+    lastError: null,
+
+    totalUpTimeElapsed,
+    totalDownTimeElapsed,
+    downTimeTimes,
+
+  };
 
   while (!aborted) {
+    let timeoutId  = 0 ;
     try {
-      controller = new AbortController();
+      const fetchController = new AbortController();
       if (options.timeout) {
-        setTimeout(() => { controller.abort() }, options.timeout);
+        timeoutId = setTimeout(() => { fetchController.abort('timed out: ' + options.timeout) }, options.timeout);
       }
-      const response = await fetch(url, { ...options, signal: controller.signal });
+      const request = new Request(url, { ...options, signal: fetchController.signal, });
+      data.request = request;
+      data.requestsCount++;
 
-      if (downTimeStart) {
+      const nowBeforeFetch = Date.now();
+      const response = await fetch(request);
+      const nowAfterResponse = Date.now();
+      await response.body?.cancel();
 
-        downTimeElapsed = Date.now() - downTimeStart;
+      // update totalUpTimeElapsed
+      lastUpTimeElapsedStart ||= nowAfterResponse;
+      lastUpTimeElapsed = nowAfterResponse - lastUpTimeElapsedStart;
+      data.totalUpTimeElapsed = totalUpTimeElapsed + lastUpTimeElapsed;
 
+
+      // update responseTimes
+      data.lastResponseTime = nowAfterResponse - nowBeforeFetch;
+      data.responseTimes.push(data.lastResponseTime);
+
+      // update responses
+      data.lastResponse = response;
+      data.responses.push(response);
+      data.lastError = null;
+
+      // update totalDownTimeElapsed
+      if (lastDownTimeStart) {
+        lastDownTimeElapsed = nowAfterResponse - lastDownTimeStart;
+        totalDownTimeElapsed += lastDownTimeElapsed;
+        lastDownTimeStart = 0;
+        data.totalDownTimeElapsed = totalDownTimeElapsed;
       }
-      downTimeStart = 0;
-
-      yield { status: response.status, statusText: response.statusText, downTimeElapsed, downTimeTimes };
 
     } catch (error) {
-      downTimeStart || downTimeTimes++;
-      downTimeStart = downTimeStart || Date.now();
-      downTimeElapsed = Date.now() - downTimeStart;
-      yield { status: 0, statusText: error.message, downTimeTimes, downTimeElapsed };
+      const nowAfterError = Date.now();
+
+      // update totalUpTimeElapsed
+
+
+      // update downTime
+      lastDownTimeStart || downTimeTimes++;
+      lastDownTimeStart = lastDownTimeStart || nowAfterError;
+      lastDownTimeElapsed = nowAfterError - lastDownTimeStart;
+      data.lastError = error;
+      data.errors.push(error);
+      data.lastResponse = null;
+      data.totalDownTimeElapsed = totalDownTimeElapsed + lastDownTimeElapsed;
+      data.downTimeTimes = downTimeTimes;
+
+
 
     } finally {
       if (options.sleep) {
         await new Promise((resolve) => setTimeout(resolve, options.sleep));
       }
+      clearTimeout(timeoutId);
+      yield data;
     }
   }
-
+  return data;
 }

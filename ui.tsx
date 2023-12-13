@@ -20,7 +20,7 @@ function UrlMonitor({url}: {url: string, key?: string}) {
         return <Text color="red">Invalid URL: {url}</Text>;
     }
     const [downTimeElapsed, setDownTimeElapsed] = useState(0);
-    const [status, setStatus] = useState(0);
+    const [status, setStatus] = useState(200);
     const [errorMessages, setErrorMessages] = useState('');
 
     useEffect(() => {
@@ -55,24 +55,6 @@ function UrlMonitor({url}: {url: string, key?: string}) {
 
 
 
-export function renderUI(...urls: string[]) {
+export function renderUI(urls: string[], timeout: number, sleep: number) {
     return render(<App urls={urls}/>);
 }
-
-// const _url = new URL(url);
-
-//     const spinner = wait('monitoring ' + _url + '...').start();
-
-//
-
-
-//     const generator = checkDownTime(_url.toString(), { timeout, sleep, signal: controller.signal });
-
-
-//     for await (const data of generator) {
-
-//         downTimeElapsed = data.downTimeElapsed;
-//         const errorMessages = data.status ? '' : data.statusText;
-//         spinner.text = `${_url} \n=>  downtime: ${ms(downTimeElapsed)}\n=>  status: ${data.status} ${errorMessages && `\n=>  error: ${errorMessages}`}`;
-//     }
-//     spinner.succeed(`${_url} \n=>  downtime: ${ms(downTimeElapsed)}`);

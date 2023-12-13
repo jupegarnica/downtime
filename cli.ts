@@ -1,6 +1,5 @@
 import { renderUI } from "./ui.tsx";
 
-const controller = new AbortController();
 
 const args = Deno.args;
 const url = args[0];
@@ -14,21 +13,17 @@ if (!url) {
     Deno.exit(1);
 }
 
-let downTimeElapsed = 0;
-
-
-
 
 if (import.meta.main) {
-    const {unmount} =     renderUI(url);
+    const { unmount } = renderUI([url], sleep, timeout);
 
     Deno.addSignalListener("SIGINT", () => {
-        controller.abort();
         unmount();
     });
+
     if (maxTime) {
         setTimeout(() => {
-            controller.abort();
+            unmount();
         }, maxTime);
     }
 }
