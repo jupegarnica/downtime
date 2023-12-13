@@ -1,20 +1,18 @@
-# Nombre del Proyecto
+# Downtime
 
-Descripción del proyecto.
+A CLI tool to check the downtime of multiples websites in realtime
 
-## Requisitos
 
-- Deno
+## Install
 
-## Instalación
+To install the CLI tool, you need to have [Deno](https://deno.land/) installed in your machine.
 
-Para instalar el proyecto, ejecuta el siguiente comando:
-
+Then, you can run the following command:
 ```sh
 deno install --allow-read --allow-net -fn downtime cli.ts
 ```
 
-## Uso
+## Usage
 
 ```sh
 downtime https://garn.dev http://faker.deno.dev --sleep 2000 --timeout 3000
