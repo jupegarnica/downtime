@@ -2,6 +2,8 @@
   "tasks": {
     "dev": "deno run --watch main.ts",
     "test": "deno test --A",
-    "start": "deno run -A cli.ts"
+    "cli": "deno run -A cli.ts",
+    "install": "deno install -fn downtime cli.ts",
+    "server": "deno run -A server.ts"
   }
 }
