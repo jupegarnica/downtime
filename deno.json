@@ -1,9 +1,9 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts",
+    "dev": "deno run --watch -A  cli.ts",
     "test": "deno test --A",
     "cli": "deno run -A cli.ts",
-    "install": "deno install -fn downtime cli.ts",
+    "install": "deno install --allow-read --allow-fetch -fn downtime cli.ts",
     "server": "deno run -A server.ts"
   },
   "lock": false
