@@ -1,7 +1,7 @@
 import { assertEquals, assertStringIncludes, assertAlmostEquals } from "https://deno.land/std@0.208.0/assert/mod.ts";
 import { checkDownTime } from "./main.ts";
 
-async function spinServer(signal: AbortSignal) {
+async function spinServer(signal: AbortSignal, port = 8080) {
   return Deno.serve({
     port: 8080,
     signal: signal,

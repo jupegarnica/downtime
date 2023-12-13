@@ -5,14 +5,14 @@ import { checkDownTime } from "./main.ts";
 
 const { useState, useEffect } = React;
 
-function App({urls}: {urls: string[]}) {
+function App({ urls, timeout, sleep }: { urls: string[], timeout: number, sleep: number }) {
 
 
-    return urls.map((url) => <UrlMonitor key={url} url={url} />);
+    return urls.map((url) => <UrlMonitor key={url} url={url} timeout={timeout} sleep={sleep} />);
 
 }
 
-function UrlMonitor({url}: {url: string, key?: string}) {
+function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeout: number, sleep: number }) {
 
     try {
         new URL(url);
@@ -20,6 +20,7 @@ function UrlMonitor({url}: {url: string, key?: string}) {
         return <Text color="red">Invalid URL: {url}</Text>;
     }
     const [downTimeElapsed, setDownTimeElapsed] = useState(0);
+    const [upTimeElapsed, setUpTimeElapsed] = useState(0);
     const [status, setStatus] = useState(200);
     const [errorMessages, setErrorMessages] = useState('');
 
@@ -31,9 +32,10 @@ function UrlMonitor({url}: {url: string, key?: string}) {
 
         (async () => {
             for await (const data of generator) {
-                setDownTimeElapsed(data.downTimeElapsed);
-                setStatus(data.status);
-                setErrorMessages(data.statusText);
+                setDownTimeElapsed(data.totalDownTimeElapsed);
+                setUpTimeElapsed(data.totalUpTimeElapsed);
+                setStatus(data.lastResponse?.status);
+                setErrorMessages(data.lastError?.message);
             }
         })();
 
@@ -46,7 +48,8 @@ function UrlMonitor({url}: {url: string, key?: string}) {
         <Text>
             {url} {'\n'}
             {"=>"} downtime: {ms(downTimeElapsed)} {'\n'}
-            {"=>"} status: {status} {'\n'}
+            {"=>"} uptime: {ms(upTimeElapsed)} {'\n'}
+            {status && `=>  status: ${status}`}
             {!status && `=>  error: ${errorMessages}`}
         </Text>
     );
@@ -56,5 +59,5 @@ function UrlMonitor({url}: {url: string, key?: string}) {
 
 
 export function renderUI(urls: string[], timeout: number, sleep: number) {
-    return render(<App urls={urls}/>);
+    return render(<App urls={urls} timeout={timeout} sleep={sleep} />);
 }
