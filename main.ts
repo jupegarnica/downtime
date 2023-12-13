@@ -35,7 +35,7 @@ type YieldedData = {
 };
 
 
-export async function* checkDownTime(url: string, fetchInit: Options): AsyncGenerator<YieldedData, YieldedData, YieldedData> {
+export async function* checkDownTime(url: string, fetchInit: Options): AsyncGenerator<YieldedData, YieldedData, void> {
   const options = { ...fetchInitDefault, ...fetchInit };
   let aborted = false;
 
@@ -114,6 +114,12 @@ export async function* checkDownTime(url: string, fetchInit: Options): AsyncGene
       const nowAfterError = Date.now();
 
       // update totalUpTimeElapsed
+      if (lastUpTimeElapsedStart) {
+        lastUpTimeElapsed = nowAfterError - lastUpTimeElapsedStart;
+        totalUpTimeElapsed += lastUpTimeElapsed;
+        lastUpTimeElapsedStart = 0;
+        data.totalUpTimeElapsed = totalUpTimeElapsed;
+      }
 
 
       // update downTime
