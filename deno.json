@@ -5,5 +5,6 @@
     "cli": "deno run -A cli.ts",
     "install": "deno install -fn downtime cli.ts",
     "server": "deno run -A server.ts"
-  }
+  },
+  "lock": false
 }
