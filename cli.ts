@@ -17,8 +17,7 @@ if (import.meta.main) {
     if (urls.length === 0) {
 
         renderMarkdown(
-            `# ERROR
-## url not provided
+            `> URLs not provided
 `
         )
         Deno.exit(1);
