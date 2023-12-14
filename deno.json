@@ -5,7 +5,7 @@
     "cli": "deno run -A cli.ts",
     "install": "deno install --allow-read --allow-net --allow-env -fn downtime cli.ts",
     "server": "deno run -A server.ts",
-    "release": "deno run  -A https://deno.land/x/version/index.ts patch && git push --tags --all"
+    "release": "deno run  -A https://deno.land/x/version/index.ts patch && git push && git push --tags"
   },
   "lock": false
 }
