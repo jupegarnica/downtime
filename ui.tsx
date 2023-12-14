@@ -1,8 +1,10 @@
 import React from 'npm:react';
 import { render, Text, Box } from 'npm:ink';
-import { ms } from "https://deno.land/x/ms@v0.1.0/ms.ts";
+import { ms as milliseconds } from "https://deno.land/x/ms@v0.1.0/ms.ts";
 import { checkDownTime } from "./main.ts";
-
+import Link from 'npm:ink-link';
+import BigText from 'npm:ink-big-text';
+import Gradient from 'npm:ink-gradient';
 const { useState, useEffect } = React;
 const startTime = Date.now();
 function App({ urls, timeout, sleep }: { urls: string[], timeout: number, sleep: number }) {
@@ -22,6 +24,10 @@ function App({ urls, timeout, sleep }: { urls: string[], timeout: number, sleep:
 
     return (
         <Box gap={1} flexDirection="column">
+            <Gradient name="passion">
+
+                <BigText text="Downtime" font="simple" space={false} letterSpacing={0} />
+            </Gradient>
             <Box flexDirection="row" gap={1} paddingTop={1}>
                 <Text color={infoColor} dimColor>From:</Text><Text color={infoColor}>{new Date(startTime).toLocaleString()}</Text>
                 <Text color={infoColor} dimColor>Total:</Text><Text color={infoColor}>{ms(totalTime, { long: true })}</Text>
@@ -86,21 +92,24 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
                             <Text bold color={statusColor(status)}>► {status}</Text> :
                             <Text color="red">🛑   </Text>
                     }
-                    <Text color="cyan">{url}</Text>
+                    <Link url={url} >
+                        <Text color="cyan">{url}</Text>
+                    </Link>
                 </Box>
                 <Box flex-grow={1} />
                 <Box>
                     <Box gap={1}>
-                        <Text color='whiteBright'>{ms(downTimeElapsed)}</Text>
-                        <Text color="gray">{"downtime"}</Text>
-                        <Text color='whiteBright'>{ms(upTimeElapsed)}</Text>
-                        <Text color="gray">{"uptime  "}</Text>
+                        <Text color='whiteBright' inverse> {ms(downTimeElapsed)} </Text>
+                        <Text color="gray" dimColor>{"downtime"}</Text>
+                        <Text color='white'>{ms(upTimeElapsed)}</Text>
+                        <Text color="gray" dimColor>{"uptime  "}</Text>
                     </Box>
                 </Box>
             </Box>
             {
                 errorMessages
-                    ? <Box dimColor paddingTop={1} paddingLeft={3} paddingBottom={1}><Text color="red">{errorMessages}</Text></Box>
+                    ? <Box paddingTop={1} paddingLeft={3} paddingBottom={1}><Text color="red"
+                        dimColor>{errorMessages}</Text></Box>
                     : null
             }
 
@@ -115,7 +124,10 @@ function statusColor(status: number) {
     if (status >= 400 && status < 500) return "#ff7f00";
     return "#ff0000";
 }
-
+function ms(ms: number, options?: { long: boolean }) {
+    const output = milliseconds(ms, options);
+    return String(output).match(/^0/) ? '0' : output;
+}
 
 
 
