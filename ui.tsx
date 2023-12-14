@@ -6,9 +6,6 @@ import { checkDownTime } from "./main.ts";
 const { useState, useEffect } = React;
 const startTime = Date.now();
 function App({ urls, timeout, sleep }: { urls: string[], timeout: number, sleep: number }) {
-
-    const infoColor = "grey";
-    const [totalTime, setTotalTime] = useState(0);
     useEffect(() => {
         const INTERVAL = totalTime < 60_000 ? 1000 : 60_000;
         const interval = setInterval(() => {
@@ -16,15 +13,22 @@ function App({ urls, timeout, sleep }: { urls: string[], timeout: number, sleep:
         }, INTERVAL);
         return () => clearInterval(interval);
     }, []);
+
+    const [totalTime, setTotalTime] = useState(0);
+
+
+    const infoColor = "grey";
+    const flexDirection = "column";
+
     return (
         <Box gap={1} flexDirection="column">
             <Box flexDirection="row" gap={1} paddingTop={1}>
                 <Text color={infoColor} dimColor>From:</Text><Text color={infoColor}>{new Date(startTime).toLocaleString()}</Text>
-                <Text color={infoColor} dimColor>Total:</Text><Text color={infoColor}>{ms(totalTime)}</Text>
+                <Text color={infoColor} dimColor>Total:</Text><Text color={infoColor}>{ms(totalTime, { long: true })}</Text>
                 <Text color={infoColor} dimColor>--sleep</Text><Text color={infoColor}>{ms(sleep)}</Text>
                 <Text color={infoColor} dimColor>--timeout</Text><Text color={infoColor}>{ms(timeout)}</Text>
             </Box>
-            <Box gap={1} flexDirection="column" >
+            <Box gap={0} flexDirection={flexDirection} wrap >
                 {urls.map((url) => (
                     <UrlMonitor key={url} url={url} timeout={timeout} sleep={sleep} />
                 ))}
@@ -74,29 +78,29 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
 
     return (
 
-        <Box flexDirection="column" borderStyle="round" borderColor="blackBright" padding={1}>
-            <Box flexDirection="row" gap={1}>
-                <Box flexDirection="row" gap={1}>
+        <Box flexDirection="column" >
+            <Box flexDirection="row" gap={1} justifyContent="space-between">
+                <Box gap={1}>
                     {
                         status ?
-                            <Text color={statusColor(status)}>►  {status}</Text> :
-                            <Text color="red">🛑 ---</Text>
+                            <Text bold color={statusColor(status)}>► {status}</Text> :
+                            <Text color="red">🛑   </Text>
                     }
-
+                    <Text color="cyan">{url}</Text>
                 </Box>
-                <Text color="cyan">{url}</Text>
-                <Box gap={1}>
-                    <Text color='whiteBright'>{ms(downTimeElapsed)}</Text>
-                    <Text color="gray">{"downtime"}</Text>
-                </Box>
-                <Box gap={1}>
-                    <Text color='whiteBright'>{ms(upTimeElapsed)}</Text>
-                    <Text color="gray">{"uptime  "}</Text>
+                <Box flex-grow={1} />
+                <Box>
+                    <Box gap={1}>
+                        <Text color='whiteBright'>{ms(downTimeElapsed)}</Text>
+                        <Text color="gray">{"downtime"}</Text>
+                        <Text color='whiteBright'>{ms(upTimeElapsed)}</Text>
+                        <Text color="gray">{"uptime  "}</Text>
+                    </Box>
                 </Box>
             </Box>
             {
                 errorMessages
-                    ? <Box paddingTop={1} paddingLeft={3}><Text color="red">{errorMessages}</Text></Box>
+                    ? <Box dimColor paddingTop={1} paddingLeft={3} paddingBottom={1}><Text color="red">{errorMessages}</Text></Box>
                     : null
             }
 
@@ -106,11 +110,12 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
 }
 
 function statusColor(status: number) {
-    if (status >= 200 && status < 300) return "green";
-    if (status >= 300 && status < 400) return "yellow";
-    if (status >= 400 && status < 500) return "red";
-    return "red";
+    if (status >= 200 && status < 300) return "#00ff00";
+    if (status >= 300 && status < 400) return "#ffff00";
+    if (status >= 400 && status < 500) return "#ff7f00";
+    return "#ff0000";
 }
+
 
 
 
