@@ -17,7 +17,7 @@ To install the CLI tool, you need to have [Deno](https://deno.land/) installed i
 
 Install the CLI tool globally.
 ```sh
-deno install --allow-read --allow-net -fn downtime https://deno.land/x/downtime/cli.ts
+deno install --allow-read --allow-net --allow-env -fn downtime https://deno.land/x/downtime/cli.ts
 ```
 Run:
 ```sh
