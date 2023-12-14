@@ -66,7 +66,7 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
     }
     const [downTimeElapsed, setDownTimeElapsed] = useState(0);
     const [upTimeElapsed, setUpTimeElapsed] = useState(0);
-    const [status, setStatus] = useState(200);
+    const [status, setStatus] = useState(' ');
     const [errorMessages, setErrorMessages] = useState('');
 
     useEffect(() => {
