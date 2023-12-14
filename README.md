@@ -32,9 +32,10 @@ deno run -A https://deno.land/x/downtime/cli.ts https://garn.dev
 
 ## Options
 
-- `--sleep`: in milliseconds. Sleep between each request (default: 1000)
+- `--sleep`:   in milliseconds. Sleep between each request (default: 1000)
 - `--timeout`: in milliseconds. Timeout  for each request (default: 5000)
 - `--maxTime`: in seconds. How long the tool should run. 0 to be always running (default: 0)
+- `--help`:    display help
 
 ## Demo
 

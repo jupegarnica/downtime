@@ -30,10 +30,7 @@ function App({ urls, timeout, sleep, maxTime }: { urls: string[], timeout: numbe
 
     return (
         <Box gap={1} flexDirection="column">
-            <Gradient name="passion">
-
-                <BigText text="Downtime" font="simple" space={false} letterSpacing={0} />
-            </Gradient>
+            <Title >Downtime</Title>
             <Box flexDirection="row" gap={1} paddingTop={1}>
                 <Text color={infoColor} dimColor>From:</Text><Text color={infoColor}>{new Date(startTime).toLocaleString()}</Text>
                 <Text color={infoColor} dimColor>Total:</Text><Text color={infoColor}>{ms(totalTime, { long: true })}</Text>
@@ -53,13 +50,31 @@ function App({ urls, timeout, sleep, maxTime }: { urls: string[], timeout: numbe
 
 }
 
+function Title({ children }: { children?: string }) {
+    const isWindows = Deno.build.os !== "windows";
+    if (isWindows) {
+        return (
+            <Box borderStyle="doubleSingle">
+                <Text bold>{children}</Text>
+            </Box>
+        );
+    }
+    return (
+        <Box>
+            <Gradient name="passion">
+                <BigText text={children} font="simple" space={false} letterSpacing={0} />
+            </Gradient>
+        </Box>
+    );
+}
+
 function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeout: number, sleep: number }) {
 
     try {
         new URL(url);
     } catch (error) {
         return (
-            <Box flexDirection="column" borderStyle="round" borderColor="blackBright" padding={1}>
+            <Box padding={1}>
                 <Text color="red">{error.message}</Text>
             </Box>
         )
@@ -101,7 +116,7 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
                             <Text bold color={statusColor(status)}>► {status}</Text> :
                             <Text color="red">🛑   </Text>
                     }
-                    <Link url={url} >
+                    <Link url={url} fallback={false}>
                         <Text color="cyan">{url}</Text>
                     </Link>
                 </Box>
