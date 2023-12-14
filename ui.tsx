@@ -51,21 +51,6 @@ function App({ urls, timeout, sleep, maxTime }: { urls: string[], timeout: numbe
 }
 
 function Title({ children }: { children?: string }) {
-    // const isWindows = Deno.build.os === "windows";
-    // if (isWindows) {
-    //     return (
-    //         <Box borderStyle="doubleSingle">
-    //             <Text bold>{children}</Text>
-    //         </Box>
-    //     );
-    // } // const isWindows = Deno.build.os === "windows";
-    // if (isWindows) {
-    //     return (
-    //         <Box borderStyle="doubleSingle">
-    //             <Text bold>{children}</Text>
-    //         </Box>
-    //     );
-    // }
     return (
         <Box>
             <Gradient name="passion">
