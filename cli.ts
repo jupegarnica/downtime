@@ -5,7 +5,7 @@ const args = parseArgs(Deno.args);
 const urls = args._.map(String);
 const sleep = args.sleep ? Number(args.sleep) : 1000;
 const timeout = args.timeout ? Number(args.timeout) : 5000;
-const maxTime = args.maxTime ? Number(args.maxTime) : 0
+const maxTime = args.maxTime ? Number(args.maxTime) * 1_000 : 0
 
 
 if (import.meta.main) {
