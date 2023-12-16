@@ -24,8 +24,8 @@ function assertTimeIsAlmostEqual(actual: number, expected: number, errorMargin: 
 }
 
 Deno.test('checkDownTime', async () => {
-  const FETCH_TIMEOUT = 2;
-  const FETCH_SLEEP = 1;
+  const FETCH_TIMEOUT = 500;
+  const FETCH_SLEEP = 10;
   const generatorController = new AbortController();
   const generator = checkDownTime('http://localhost:8080', { timeout: FETCH_TIMEOUT, sleep: FETCH_SLEEP, signal: generatorController.signal });
 
@@ -40,6 +40,7 @@ Deno.test('checkDownTime', async () => {
   {
     // first run should be a success
     const { value: data } = await generator.next();
+
     assertEquals(data.requestsCount, 1);
     assertEquals(data.responses.length, 1);
     assertEquals(data.errors.length, 0);
