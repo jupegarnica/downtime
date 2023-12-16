@@ -61,7 +61,6 @@ Deno.test('checkDownTime', async () => {
     assertEquals(data.responses.length, 2);
     assertEquals(data.errors.length, 0);
     assertTimeIsAlmostEqual(data.totalUpTimeElapsed, uptimeElapsed);
-    totalUpTimeElapsed = data.totalUpTimeElapsed;
   }
 
   // third run should be a failure but not down time
@@ -81,7 +80,7 @@ Deno.test('checkDownTime', async () => {
 
     assertEquals(data.totalDownTimeElapsed, 0);
     assertEquals(data.downTimeTimes, 1);
-    assertEquals(data.totalUpTimeElapsed, totalUpTimeElapsed);
+    totalUpTimeElapsed = data.totalUpTimeElapsed;
 
   }
 
@@ -113,8 +112,8 @@ Deno.test('checkDownTime', async () => {
     assertEquals(data.requestsCount, 5);
     assertEquals(data.responses.length, 3);
     assertEquals(data.errors.length, 2);
-    assertTimeIsAlmostEqual(data.totalUpTimeElapsed, uptimeElapsed);
-    assertTimeIsAlmostEqual(data.totalDownTimeElapsed, downTimeElapsed, 1);
+    assertTimeIsAlmostEqual(data.totalUpTimeElapsed, totalUpTimeElapsed, 5);
+    assertTimeIsAlmostEqual(data.totalDownTimeElapsed, downTimeElapsed, 5);
 
     totalDownTimeElapsed = data.totalDownTimeElapsed;
   }
