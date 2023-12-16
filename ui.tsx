@@ -102,8 +102,8 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
     return (
 
         <Box flexDirection="column" >
-            <Box flexDirection="row" gap={1} justifyContent="space-between">
-                <Box gap={1}>
+            <Box flexDirection="row" gap={1} justifyContent="space-between" flexWrap="wrap">
+                <Box gap={1} flexShrink={0}>
                     {
                         status ?
                             <Text bold color={statusColor(status)}>► {status}</Text> :
@@ -113,14 +113,11 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
                         <Text color="cyan">{url}</Text>
                     </Link>
                 </Box>
-                <Box flex-grow={1} />
-                <Box>
-                    <Box gap={1}>
-                        <Text color='whiteBright' inverse> {ms(downTimeElapsed)} </Text>
-                        <Text color="gray" dimColor>{"downtime"}</Text>
-                        <Text color='white'>{ms(upTimeElapsed)}</Text>
-                        <Text color="gray" dimColor>{"uptime  "}</Text>
-                    </Box>
+                <Box gap={1} flexGrow={1} flexShrink={0} justifyContent="flex-end">
+                    <Text color='whiteBright' inverse> {msPad(downTimeElapsed)} </Text>
+                    <Text color="gray" dimColor>{"downtime"}</Text>
+                    <Text color='white'>{msPad(upTimeElapsed)}</Text>
+                    <Text color="gray" dimColor>{"uptime  "}</Text>
                 </Box>
             </Box>
             {
@@ -141,11 +138,15 @@ function statusColor(status: number) {
     if (status >= 400 && status < 500) return "#ff7f00";
     return "#ff0000";
 }
-function ms(ms: number, options?: { long: boolean }) {
-    const output = milliseconds(ms, options);
+function ms(time: number, options?: { long: boolean }): string {
+    const output = milliseconds(time, options);
     let outputZero = String(output).match(/^0/) ? '0' : output;
     let outputInfinity = String(output).match(/^Infinity/) ? '∞' : outputZero;
-    return outputInfinity
+    return String(outputInfinity)
+}
+
+function msPad(time: number, pad: number = 4): string {
+    return ms(time).padStart(pad, ' ');
 }
 
 function Markdown({ children }: { children: string }) {
