@@ -107,7 +107,7 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
                     {
                         status ?
                             <Text bold color={statusColor(status)}>► {status}</Text> :
-                            <Text color="red">🛑   </Text>
+                            <Text color="red">{'■    '}</Text>
                     }
                     <Link url={url} fallback={false}>
                         <Text color="cyan">{url}</Text>
