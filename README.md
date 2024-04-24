@@ -44,6 +44,10 @@ deno run -A https://deno.land/x/downtime/cli.ts https://garn.dev
 - `--maxTime`: in seconds. How long the tool should run. 0 to be always running (default: 0)
 - `--help`:    display help
 
-## Demo
+## Example
+
+```sh
+downtime https://garn.dev https://faker.deno.dev https://faker.deno.dev?status=400 https://faker.deno.dev?status=500 --sleep 2000 --timeout 3000
+```
 
 ![https://deno.land/x/downtime](./demo.png)

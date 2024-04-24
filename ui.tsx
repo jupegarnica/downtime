@@ -108,9 +108,9 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
                             <Text bold color={statusColor(status)}>► {status}</Text> :
                             <Text color="red">{'■    '}</Text>
                     }
-                    <Link url={url} fallback={false}>
-                        <Text color="cyan">{url}</Text>
-                    </Link>
+                    <Text color="cyan">{url}</Text>
+                    {/* <Link url={url} fallback={false}>
+                    </Link> */}
                 </Box>
                 <Box gap={1} flexGrow={1} flexShrink={0} justifyContent="flex-end">
                     <Text color='red' inverse> {msPad(downTimeElapsed)} {"🔻"}</Text>
@@ -122,7 +122,7 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
             {
                 errorMessages
                     ? <Box paddingTop={1} paddingLeft={3} paddingBottom={1}><Text color="red"
-                        dimColor>{errorMessages}</Text></Box>
+                        inverse>{errorMessages}</Text></Box>
                     : null
             }
 
@@ -144,7 +144,7 @@ function ms(time: number): string {
     if (time === Infinity) {
         return '∞';
     }
-    const out = format(time, { style: "short", max: 2, locale: "es-ES"});
+    const out = format(time, { style: "short", max: 2, locale: "es-ES" });
 
 
     return out || '0 s';
