@@ -1,6 +1,6 @@
-import React from 'npm:react@17.0.2';
-import { render, Text, Box } from 'npm:ink@3.0.7';
-import { ms as milliseconds } from "npm:ms@2.1.3";
+import React from 'npm:react@18.2.0';
+import { render, Text, Box } from 'npm:ink@4.4.1';
+import { format } from "jsr:@wilcosp/ms-relative@0.0.5";
 import { checkDownTime } from "./main.ts";
 import Link from 'npm:ink-link@3.0.0';
 import BigText from 'npm:ink-big-text@2.0.0';
@@ -33,7 +33,7 @@ function App({ urls, timeout, sleep, maxTime }: { urls: string[], timeout: numbe
             <Title >Downtime</Title>
             <Box flexDirection="row" gap={1} paddingTop={1}>
                 <Text color={infoColor} dimColor>From:</Text><Text color={infoColor}>{new Date(startTime).toLocaleString()}</Text>
-                <Text color={infoColor} dimColor>Total:</Text><Text color={infoColor}>{ms(totalTime, { long: true })}</Text>
+                <Text color={infoColor} dimColor>Total:</Text><Text color={infoColor}>{ms(totalTime)}</Text>
                 <Text color={infoColor} dimColor>--sleep</Text><Text color={infoColor}>{ms(sleep)}</Text>
                 <Text color={infoColor} dimColor>--timeout</Text><Text color={infoColor}>{ms(timeout)}</Text>
                 <Text color={infoColor} dimColor>--maxTime</Text><Text color={infoColor}>{ms(maxTime || Infinity)}</Text>
@@ -113,10 +113,10 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
                     </Link>
                 </Box>
                 <Box gap={1} flexGrow={1} flexShrink={0} justifyContent="flex-end">
-                    <Text color='whiteBright' inverse> {msPad(downTimeElapsed)} </Text>
-                    <Text color="gray" dimColor>{"downtime"}</Text>
-                    <Text color='white'>{msPad(upTimeElapsed)}</Text>
-                    <Text color="gray" dimColor>{"uptime  "}</Text>
+                    <Text color='red' inverse> {msPad(downTimeElapsed)} {"🔻"}</Text>
+                    {/* <Text color="gray" dimColor></Text> */}
+                    <Text color='green'>{msPad(upTimeElapsed)} {"🟢  "}</Text>
+                    {/* <Text color="gray" dimColor></Text> */}
                 </Box>
             </Box>
             {
@@ -137,14 +137,20 @@ function statusColor(status: number) {
     if (status >= 400 && status < 500) return "#ff7f00";
     return "#ff0000";
 }
-function ms(time: number, options?: { long: boolean }): string {
-    const output = milliseconds(time, options);
-    let outputZero = String(output).match(/^0/) ? '0' : output;
-    let outputInfinity = String(output).match(/^Infinity/) ? '∞' : outputZero;
-    return String(outputInfinity)
+function ms(time: number): string {
+    if (time < 0) {
+        return '0 s';
+    }
+    if (time === Infinity) {
+        return '∞';
+    }
+    const out = format(time, { style: "short", max: 2, locale: "es-ES"});
+
+
+    return out || '0 s';
 }
 
-function msPad(time: number, pad: number = 4): string {
+function msPad(time: number, pad: number = 9): string {
     return ms(time).padStart(pad, ' ');
 }
 
