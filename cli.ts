@@ -1,5 +1,5 @@
 import { renderMarkdown, renderUI } from "./ui.tsx";
-import { parseArgs } from "https://deno.land/std@0.208.0/cli/parse_args.ts";
+import { parseArgs } from "jsr:@std/cli@0.223.0";
 
 const args = parseArgs(Deno.args);
 const help = args.help;

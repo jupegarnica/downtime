@@ -1,10 +1,10 @@
-import React from 'npm:react';
-import { render, Text, Box } from 'npm:ink';
-import { ms as milliseconds } from "https://deno.land/x/ms@v0.1.0/ms.ts";
+import React from 'npm:react@17.0.2';
+import { render, Text, Box } from 'npm:ink@3.0.7';
+import { ms as milliseconds } from "npm:ms@2.1.3";
 import { checkDownTime } from "./main.ts";
-import Link from 'npm:ink-link';
-import BigText from 'npm:ink-big-text';
-import Gradient from 'npm:ink-gradient';
+import Link from 'npm:ink-link@3.0.0';
+import BigText from 'npm:ink-big-text@2.0.0';
+import Gradient from 'npm:ink-gradient@3.0.0';
 
 import * as Marked from 'npm:marked@4.2.12';
 import * as Renderer from 'npm:marked-terminal@5.1.1';
