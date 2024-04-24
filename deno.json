@@ -6,7 +6,8 @@
     "install": "deno install --allow-read --allow-net --allow-env -fn downtime cli.ts",
     "install:x": "deno install -A -fn downtime https://deno.land/x/downtime/cli.ts",
     "server": "deno run -A server.ts",
-    "release": "deno run  -A https://deno.land/x/version/index.ts patch && git push && git push --tags && deno publish"
+    "version":"deno run -A jsr:@utility/version patch",
+    "release": "deno task version && git push && git push --tags && deno publish"
   },
   "lock": false,
   "name": "@garn/downtime",
