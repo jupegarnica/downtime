@@ -8,5 +8,8 @@
     "server": "deno run -A server.ts",
     "release": "deno run  -A https://deno.land/x/version/index.ts patch && git push && git push --tags"
   },
-  "lock": false
+  "lock": false,
+  "name": "@garn/downtime",
+  "exports": "./cli.ts",
+  "version": "0.0.9"
 }
