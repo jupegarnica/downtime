@@ -113,9 +113,9 @@ function UrlMonitor({ url, timeout, sleep }: { url: string, key?: string, timeou
                     </Link> */}
                 </Box>
                 <Box gap={1} flexGrow={1} flexShrink={0} justifyContent="flex-end">
-                    <Text color='red' inverse> {msPad(downTimeElapsed, 9)} {"🔻"}</Text>
+                    <Text color='red' inverse> {msPad(downTimeElapsed)} {"🔻"}</Text>
                     {/* <Text color="gray" dimColor></Text> */}
-                    <Text color='green'>{msPad(upTimeElapsed, 11)} {"🟢  "}</Text>
+                    <Text color='green'>{msPad(upTimeElapsed)} {"🟢  "}</Text>
                     {/* <Text color="gray" dimColor></Text> */}
                 </Box>
             </Box>
