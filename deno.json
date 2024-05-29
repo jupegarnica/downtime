@@ -4,8 +4,8 @@
     "test": "deno test -A",
     "cli": "deno run -A cli.ts",
     "install": "deno install --allow-read --allow-net --allow-env -fn downtime cli.ts",
-    "install:x": "deno install -A -fn downtime https://deno.land/x/downtime/cli.ts",
-    "install:jsr": "deno install -A -fn downtime jsr:@garn/downtime",
+    "install:x": "deno install -g -A -fn downtime https://deno.land/x/downtime/cli.ts",
+    "install:jsr": "deno install -g -A -fn downtime jsr:@garn/downtime",
     "server": "deno run -A server.ts",
     "version":"deno run -A jsr:@utility/version patch",
     "release": "deno task version && git push && git push --tags && deno publish"
