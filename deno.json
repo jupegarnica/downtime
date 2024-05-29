@@ -12,5 +12,5 @@
   "lock": false,
   "name": "@garn/downtime",
   "exports": "./cli.ts",
-  "version": "1.0.14"
+  "version": "1.0.15"
 }
