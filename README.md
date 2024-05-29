@@ -34,7 +34,7 @@ downtime https://garn.dev http://faker.deno.dev --sleep 2000 --timeout 3000
 ### Run remotely
 
 ```sh
-deno run -A https://deno.land/x/downtime/cli.ts https://garn.dev
+deno run -A jsr:@garn/downtime https://garn.dev
 ```
 
 ## Options

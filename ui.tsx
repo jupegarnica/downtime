@@ -1,8 +1,8 @@
-import React from 'npm:react@18.2.0';
+import React from 'npm:react@18.3.1';
 import { render, Text, Box } from 'npm:ink@4.4.1';
 import { format } from "jsr:@wilcosp/ms-relative@0.0.5";
 import { checkDownTime } from "./main.ts";
-import Link from 'npm:ink-link@3.0.0';
+// import Link from 'npm:ink-link@3.0.0';
 import BigText from 'npm:ink-big-text@2.0.0';
 import Gradient from 'npm:ink-gradient@3.0.0';
 
